@@ -1,0 +1,15 @@
+想存个安装包，无奈文件太大了，于是: 1打包2分卷
+
+安装包文件包括：
+    vim8.1.0788.tar
+    vim8.1.0788_unix_src.tar.gz
+    gvim8.1.0788_x64.zip
+    gvim8.1.0788_x86.zip
+MD5生成过程：
+    md5sum vim8.1.0788.tar vim8.1.0788_unix_src.tar.gz gvim8.1.0788_x64.zip gvim8.1.0788_x86.zip > md5sum
+打包过程：
+    tar -cf vim_8.1.0788.tar gvim_8.1.0788_x64.zip gvim_8.1.0788_x86.zip vim_8.1.0788_unix_src.tar.gz 
+    split -b 1M vim8.1.0788.tar vim8.1.0788.tar_part_
+解包过程：
+    cat vim8.1.0788.tar_part_* > vim8.1.0788.tar
+    tar -xf vim8.1.0788.tar
