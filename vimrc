@@ -130,7 +130,7 @@ syntax on
 set tabpagemax=18
 
 " 设定Python的DLL位置
-set pythonthreedll=python36.dll
+set pythonthreedll=python37.dll
 
 "总是显示标签栏
 set showtabline=2 
