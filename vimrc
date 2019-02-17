@@ -175,3 +175,39 @@ set shiftwidth=4
 "用空格代替制表符.
 set expandtab
 "set noexpandtab
+
+" leaderf设置
+noremap <leader>t :LeaderfBufTag<Cr>
+noremap <leader>F :LeaderfFile <C-r>=Search_root()<Cr><Cr>
+let g:Lf_UseVersionControlTool=0
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"look up project root directory
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:root_marker = ["projectroot",".git"]
+if !exists('g:root_marker')
+    let g:root_marker = [".git"]
+endif
+function! Search_root()
+    let l:root = fnamemodify(".", ":p:h")
+    if !empty(g:root_marker)
+        let root_found = 0
+        let l:cur_dir = fnamemodify(l:root, ":p:h")
+        let l:prev_dir = ""
+        while l:cur_dir != l:prev_dir
+            for tags_dir in g:root_marker
+                let l:tag_path = l:cur_dir . "/" . tags_dir
+                if filereadable(l:tag_path) || isdirectory(l:tag_path)
+                    let root_found = 1 | break
+                endif
+            endfor
+            if root_found
+                let l:root = l:cur_dir | break
+            endif
+            let l:prev_dir = l:cur_dir
+            let l:cur_dir = fnamemodify(l:cur_dir, ":p:h:h")
+        endwhile
+        return root_found ? l:root : fnamemodify(".", ":p:h")
+    endif
+    return l:root
+endfunction
