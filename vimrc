@@ -186,7 +186,7 @@ let g:Lf_UseVersionControlTool=0
 " Tag list (ctags)
 set tags=./tags "add current directory's generated tags file
 set tags+=../tags
-nnoremap <silent> <F4> :call GenerateCtags()<cr><esc>:TlistUpdate<CR><esc>:TlistOpen<CR><CR>
+nnoremap <silent><F4> :TlistUpdate<CR><esc>:TlistOpen<CR><CR>
 let Tlist_Show_One_File = 1            "不同时显示多个文件的tag，只显示当前文件的
 let Tlist_Exit_OnlyWindow = 1          "如果taglist窗口是最后一个窗口，则退出vim
 let Tlist_Use_Right_Window = 1         "在右侧窗口中显示taglist窗口
@@ -201,6 +201,7 @@ let NERDTreeIgnore=['\.pyc','\~$','\.swp']
 let NERDTreeShowBookmarks=1
 let NERDTreeShowHidden=1
 
+nnoremap <silent> <leader><F4> :call GenerateCtags()<cr><esc>:TlistUpdate<CR><esc>
 function! GenerateCtags()
     let l:root = fnamemodify(".", ":p:h")
     echom "===========".l:root
