@@ -45,7 +45,7 @@ let mapleader = " "
 inoremap <F2> <C-R>=strftime(" XUHONG_%Y%m%d ")<Cr>
 
 "普通模式下连续按5次空格，清楚搜索关键字高亮
-nnoremap <Space><Space><Space><Space><Space> :nohl<CR>
+nnoremap <Space><Space><Space> :nohl<CR>
 
 "普通模式下按 <leader>p 粘贴系统粘贴板上的内容
 "普通模式下按 <leader>y 复制当前单词至系统粘贴板
