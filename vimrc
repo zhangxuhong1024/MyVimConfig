@@ -192,6 +192,15 @@ let Tlist_Exit_OnlyWindow = 1          "如果taglist窗口是最后一个窗口
 let Tlist_Use_Right_Window = 1         "在右侧窗口中显示taglist窗口
 let Tlist_WinWidth=30        "设置taglist宽度
 
+" NERDTree
+nnoremap <silent><F3> :NERDTree<CR>
+let g:NERDTreeWinPos="left"
+let g:NERDTreeWinSize=30
+let g:NERDTreeShowLineNumbers=1
+let NERDTreeIgnore=['\.pyc','\~$','\.swp']
+let NERDTreeShowBookmarks=1
+let NERDTreeShowHidden=1
+
 function! GenerateCtags()
     let l:root = fnamemodify(".", ":p:h")
     echom "===========".l:root
