@@ -183,3 +183,64 @@ let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
 let g:Lf_WorkingDirectoryMode = 'Ac'
 let g:Lf_UseVersionControlTool=0
 
+" Tag list (ctags)
+set tags=./tags "add current directory's generated tags file
+set tags+=../tags
+nnoremap <silent> <F4> :call GenerateCtags()<cr><esc>:TlistUpdate<CR><esc>:TlistOpen<CR><CR>
+let Tlist_Show_One_File = 1            "不同时显示多个文件的tag，只显示当前文件的
+let Tlist_Exit_OnlyWindow = 1          "如果taglist窗口是最后一个窗口，则退出vim
+let Tlist_Use_Right_Window = 1         "在右侧窗口中显示taglist窗口
+let Tlist_WinWidth=30        "设置taglist宽度
+
+function! GenerateCtags()
+    let l:root = fnamemodify(".", ":p:h")
+    echom "===========".l:root
+    echom "Search_root:".Search_root()
+    let l:xxoo=substitute(Search_root(), " ", '\\\\\\ ', "g")
+    echom "xxoo:".l:xxoo
+    exe "cd " . Search_root()
+    if &filetype == 'c' || &filetype == 'cpp'
+        call system("ctags -R --c++-types=+p --fields=+ailKSz --extra=+q .")
+        exe "TlistUpdate"
+        echo "fond C/C++ files, tags update complete ... "
+    elseif &filetype == 'python'
+        call system("ctags -R --langmap=python:+.pyw *")
+        echo "fond Python files, tags update complete ... "
+    else
+        echohl  ErrorMsg | echo "Generate tags fail!" | echohl None
+    endif
+    exec  "set tags+=". l:xxoo. "\\tags" 
+    execute 
+    let $PATH=$PATH.";" . substitute(Search_root(), " ", '\\ ', "g")
+    exe "cd " . l:root
+endfunction
+
+"look up project root directory
+let g:root_marker = ["projectroot",".git","readme.txt"]
+if !exists('g:root_marker')
+    let g:root_marker = [".git"]
+endif
+function! Search_root()
+    let l:root = fnamemodify(".", ":p:h")
+    if !empty(g:root_marker)
+        let root_found = 0
+        let l:cur_dir = fnamemodify(l:root, ":p:h")
+        let l:prev_dir = ""
+        while l:cur_dir != l:prev_dir
+            for tags_dir in g:root_marker
+                let l:tag_path = l:cur_dir . "/" . tags_dir
+                if filereadable(l:tag_path) || isdirectory(l:tag_path)
+                    let root_found = 1 | break
+                endif
+            endfor
+            if root_found
+                let l:root = l:cur_dir | break
+            endif
+            let l:prev_dir = l:cur_dir
+            let l:cur_dir = fnamemodify(l:cur_dir, ":p:h:h")
+        endwhile
+        return root_found ? l:root : fnamemodify(".", ":p:h")
+    endif
+    return l:root
+endfunction
+
